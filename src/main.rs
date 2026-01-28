@@ -32,6 +32,30 @@ fn add_line_numbers_b(input_string: String) -> String {
     result
 }
 
+fn surpress_empty_lines(input_string: String) -> String {
+    let mut result = String::new();
+    let mut consecutive_empty_line_count = 0;
+    for line in input_string.lines(){
+        if line.trim().is_empty(){
+            consecutive_empty_line_count += 1;
+        }
+        else{
+            consecutive_empty_line_count = 0;
+        }
+
+        let combined = format!("{}\n", line);
+        let culled_combined = format!("{}", line);
+        
+        if consecutive_empty_line_count >= 2{
+            result.push_str(&culled_combined);
+        }
+        else{
+            result.push_str(&combined);
+        }
+    }
+    result
+}
+
 fn add_line_end(input_string: String) -> String {
     let mut result = String::new();
     for line in input_string.lines() {
@@ -58,22 +82,28 @@ fn main() {
         let mut has_n = false;
         let mut has_e = false;
         let mut has_b = false;
+        let mut has_s = false;
 
         for check in 0..args_amount{
-        if args[check].contains("-n"){
-            has_n = true;
+            if args[check].contains("-n"){
+                has_n = true;
+            }
+            if args[check].contains("-b"){
+                has_b = true;
+            }
+            if args[check].contains("-e"){
+                has_e = true;
+            }
+            if args[check].contains("-s"){
+                has_s = true;
+            }
+            if has_b && has_n{
+                has_both = true;
+            }
         }
-        if args[check].contains("-b"){
-            has_b = true;
+        if has_s{
+            all_text = surpress_empty_lines(all_text);
         }
-        if args[check].contains("-e"){
-            has_e = true;
-        }
-        if has_b && has_n{
-            has_both = true;
-        }
-    }
-    
         if has_n{
             all_text = add_line_numbers(all_text);
         }
@@ -83,10 +113,10 @@ fn main() {
         if has_b{
             all_text = add_line_numbers_b(all_text);
         }
-
         if has_both{
             all_text = String::from("You can use either -b or -n, not both!");
         }
+        
 
         println!("{}", all_text);
     }
