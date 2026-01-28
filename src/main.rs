@@ -49,6 +49,9 @@ fn main() {
     let mut all_text = fs::read_to_string(&args[1])
     .expect("Should have been able to read the file");
 
+
+    let mut has_both = false;
+
     let mut has_n = false;
     let mut has_e = false;
     let mut has_b = false;
@@ -56,11 +59,16 @@ fn main() {
         if args[check].contains("-n"){
             has_n = true;
         }
+        if args[check].contains("-b"){
+            has_b = true;
+        }
+
         if args[check].contains("-e"){
             has_e = true;
         }
-        if args[check].contains("-b"){
-            has_b = true;
+
+        if has_b && has_n{
+            has_both = true;
         }
     }
 
@@ -68,6 +76,7 @@ fn main() {
         println!("enter a file name!");
     }
     else{
+        
         if has_n{
             all_text = add_line_numbers(all_text);
         }
@@ -76,6 +85,10 @@ fn main() {
         }
         if has_b{
             all_text = add_line_numbers_b(all_text);
+        }
+
+        if has_both{
+            all_text = String::from("You can use either -b or -n, not both!");
         }
     }
     
