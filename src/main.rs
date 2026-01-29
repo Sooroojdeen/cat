@@ -1,4 +1,3 @@
-// use core::error;
 use std::env;
 use std::fs;
 
@@ -101,6 +100,7 @@ fn main() {
                 has_both = true;
             }
         }
+
         if has_s{
             all_text = surpress_empty_lines(all_text);
         }
